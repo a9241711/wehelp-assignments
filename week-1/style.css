@@ -8,8 +8,8 @@ body {
 }
 header {
   width: 100%;
-  display: flex;
-  justify-content: space-between;
+  /* display: flex;
+  justify-content: space-between; */
   /* margin: 5px 0; */
   background-color: #fff;
   position: fixed;
@@ -17,8 +17,10 @@ header {
   padding: 5px 0;
 }
 .title {
-  width: fit-content;
+  float: left;
   white-space: nowrap;
+  /* width: fit-content;
+  white-space: nowrap; */
 }
 .banner .main {
   font-size: 2rem;
@@ -30,6 +32,9 @@ header {
 }
 .ham {
   display: none;
+}
+nav {
+  float: right;
 }
 nav ul {
   list-style: none;
