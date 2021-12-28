@@ -27,6 +27,7 @@ header {
   white-space: nowrap; */
 }
 .banner .main {
+  white-space: nowrap;
   font-size: 2rem;
 }
 #burger {
