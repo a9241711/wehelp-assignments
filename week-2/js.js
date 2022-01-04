@@ -82,15 +82,25 @@ maxProduct([-1, -2, 0]);
 //雙迴圈
 function twoSum(nums, target) {
   // your code here
+  //   let sum = [];
+  //   for (let i = 0; i < nums.length; i++) {
+  //     for (let j = i; j < nums.length; j++) {
+  //       if (target == nums[i] + nums[j]) {
+  //         sum.push(i, j);
+  //       }
+  //     }
+  //     return sum;
+  //   }
   let sum = [];
   for (let i = 0; i < nums.length; i++) {
-    for (let j = i; j < nums.length; j++) {
-      if (target == nums[i] + nums[j]) {
-        sum.push(i, j);
-      }
+    if (nums[i] > target) {
+      continue;
     }
-    return sum;
+    if (nums.includes(target - nums[i])) {
+      sum.push(i);
+    }
   }
+  return sum;
 }
 let result = twoSum([2, 11, 7, 15], 9);
 console.log(result); // show [0, 2] because nums[0]+nums[2] is 9
