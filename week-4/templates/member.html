@@ -1,0 +1,14 @@
+{% extends "base.html"%}
+{% block header%}歡迎光臨，這是會員頁{% endblock %}
+{% block content%}
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    {% for message in messages %}
+      <h3 style="background-color:#e9e799 ;">{{ message }}</h3>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+<h1 style="text-align: center; margin: 10px 0;">恭喜您{{userName}}，成功登入系統</h1>
+<a href="{{url_for('logout')}}">登出系統</a>
+{% endblock%}
