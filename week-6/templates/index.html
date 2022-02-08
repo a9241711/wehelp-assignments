@@ -1,0 +1,43 @@
+{% extends "base.html"%}
+{% block header%}歡迎光臨，註冊登入系統{% endblock %}
+{% block content%}
+<h3 style="text-align: center;">註冊帳號</h3>
+{% if successMssage !=none %}
+    <h3 style="background-color:#e9e799 ;">{{ successMssage }}</h3>
+{% endif%}
+<form action="{{url_for('signup')}}" method="POST">
+    <div>
+    <label >姓名</label>
+    <input type="text" name="name" required>
+    </div>
+    <div>
+    <label >帳號</label>
+    <input type="email" name="username" required>
+    </div>
+    <div>
+    <label >密碼</label>
+    <input type="text" name="password" required>
+    </div>
+    <button type="submit"> 註冊</button>
+</form>
+<h3 style="text-align: center;">登入系統</h3>
+<form action="{{url_for('signin')}}" method="POST">
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    {% for message in messages %}
+      <h3 style="background-color:#e9e799 ;">{{ message }}</h3>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+    <div>
+    <label >帳號</label>
+    <input type="text" name="username">
+    </div>
+    <div>
+    <label >密碼</label>
+    <input type="text" name="password">
+    </div>
+    <button type="submit"> 登入</button>
+</form>
+
+{% endblock%}
