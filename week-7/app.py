@@ -5,8 +5,9 @@ import mysql.connector,json
 from mysql.connector import pooling,Error
 from flask_restful import Resource, Api
 
+
 try:
-    connection_pool=pooling.MySQLConnectionPool(
+    connection_pool=pooling.MySQLConnectionPool(#connection pool
         pool_name="test_pool",
         pool_size=20,
         pool_reset_session=True,
@@ -15,21 +16,9 @@ try:
         user="root",
         password="root",
         )
-    
-    
-    # print(connection_pool.pool_name)
-    # print(connection_pool.pool_size)
-    #連結connection_pool
-    # connection=connection_pool.get_connection()
-    # mycursor=connection.cursor()
 except Error as e:
     print("Error while connecting to MySQL using Connection pool ", e)
-# finally:
-#     # closing database connection.
-#     if connection.is_connected():
-#         mycursor.close()
-#         connection.close()
-#         print("MySQL connection is closed")
+
 # 建立Application物件
 app = Flask(__name__)
 #建立Database
@@ -40,11 +29,10 @@ app = Flask(__name__)
 #  database="member"
 #     )
 api= Api(app) #創建api物件
-# mycursor = mydb.cursor()
 app.secret_key = "mySecret"  # session的密鑰
-app.config["PERMANENT_SESSION_LIFETIME"] = 600
+app.config["PERMANENT_SESSION_LIFETIME"] = 600 #Session過期時間
 
- 
+ #建立API
 class Search(Resource):
     def get(self):
         username=request.args.get("username")
@@ -67,7 +55,7 @@ class Search(Resource):
         if session.get("username"):
             username=session.get("username")
             name =session.get("name")
-            newname=request.get_json()
+            newname=request.get_json() #接收json
             print(newname["name"])
             if newname["name"] =='' or newname["name"] == name:
                 res={"error":"true"}
@@ -87,15 +75,16 @@ class Search(Resource):
             res={"error":"true"}
             print(res)
             return jsonify(res)
-api.add_resource(Search, "/api/members")
+            #==json.dumps差別在於Content-Type。jsonify==application/jso。 json.dumps==text/html; charset=utf-8
+api.add_resource(Search, "/api/members") #endpoint
 
-
+#首頁
 @app.route("/")
 def index():
     successMssage=request.args.get("successMssage")
     return render_template("index.html",successMssage=successMssage)
 
-
+#登入
 @app.route("/signin", methods=["GET","POST"])
 def signin():
     if request.method =="POST":
@@ -125,6 +114,7 @@ def signin():
         return redirect(url_for("member"))
     return render_template("index.html")
 
+#註冊
 @app.route("/signup", methods=["GET","POST"])
 def signup():
     if request.method== "POST":
@@ -155,12 +145,12 @@ def error():
     responseMessage = request.args.get("message")
     return render_template("error.html", errorMessage=responseMessage)
 
-
+#會員畫面
 @app.route("/member")
 def member(): 
     return render_template("member.html", name=session.get("name"),username=session.get("username"))
 
-
+#登出
 @app.route("/signout")
 def signout():
     session.pop('username', None)

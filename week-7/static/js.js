@@ -30,11 +30,10 @@ inputchange.addEventListener("click",(e)=>{
     console.log(changename)
     fetch("http://127.0.0.1:3000/api/members",{
         method:"POST",
-        headers:{
-            "Content-Type":"application/json"},
-        body:JSON.stringify({ name:changename})
-    }).then((response)=>{
-        return response.json();
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({ name:changename}) //轉換JSON字串
+    }).then((response)=>{//取得response
+        return response.json();// ==json.loads 把JSON轉換回dict
     }).then((jsonData)=>{
         if(jsonData["ok"]=="true"){//練習用[]取值
         let titlename=document.querySelector(".titlename")
