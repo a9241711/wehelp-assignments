@@ -56,9 +56,9 @@ class Search(Resource):
             username=session.get("username")
             name =session.get("name")
             newname=request.get_json() #接收json
-            print(newname["name"])
+            # print(newname["name"],username)
             if newname["name"] =='' or newname["name"] == name:
-                res={"error":"true"}
+                res={"error":True} 
                 print(res)
                 return jsonify(res)
             else:
@@ -70,9 +70,9 @@ class Search(Resource):
                 connection.commit()
                 session["name"]=newname["name"]
                 connection.close()#關閉connection pool
-                return jsonify( {"ok":"true"})
+                return jsonify( {"ok":True})
         else:
-            res={"error":"true"}
+            res={"error":True}
             print(res)
             return jsonify(res)
             #==json.dumps差別在於Content-Type。jsonify==application/jso。 json.dumps==text/html; charset=utf-8

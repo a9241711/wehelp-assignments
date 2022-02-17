@@ -35,7 +35,8 @@ inputchange.addEventListener("click",(e)=>{
     }).then((response)=>{//取得response
         return response.json();// ==json.loads 把JSON轉換回dict
     }).then((jsonData)=>{
-        if(jsonData["ok"]=="true"){//練習用[]取值
+        console.log(jsonData)
+        if(jsonData["ok"]==true){//練習用[]取值
         let titlename=document.querySelector(".titlename")
         change.textContent = "更新成功"
         titlename.textContent= `恭喜您${changename}，成功登入系統`
