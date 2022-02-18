@@ -1,26 +1,29 @@
 from urllib import response
-from flask import Flask, flash, redirect, url_for, request, render_template, session,jsonify
+from flask import Flask, flash, redirect, url_for, request, render_template, session,jsonify,Blueprint 
 from werkzeug.security import generate_password_hash, check_password_hash
-import mysql.connector,json
-from mysql.connector import pooling,Error
-from flask_restful import Resource, Api
-
-
-try:
-    connection_pool=pooling.MySQLConnectionPool(#connection pool
-        pool_name="test_pool",
-        pool_size=20,
-        pool_reset_session=True,
-        host="localhost",
-        database="member",
-        user="root",
-        password="root",
-        )
-except Error as e:
-    print("Error while connecting to MySQL using Connection pool ", e)
+from database import connect
+from view.api import api
+# import mysql.connector,json
+# from mysql.connector import pooling,Error
+# from flask_restful import Resource, Api
+# def connect():
+#     try:
+#         connection_pool=pooling.MySQLConnectionPool(#connection pool
+#             pool_name="test_pool",
+#             pool_size=20,
+#             pool_reset_session=True,
+#             host="localhost",
+#             database="member",
+#             user="root",
+#             password="root",
+#             )
+#         connection=connection_pool.get_connection()
+#         return connection
+#     except Error as e:
+#         print("Error while connecting to MySQL using Connection pool ", e)
 
 # 建立Application物件
-app = Flask(__name__)
+
 #建立Database
 # mydb = mysql.connector.connect(
 #  host="localhost",
@@ -28,55 +31,58 @@ app = Flask(__name__)
 #  password="root",
 #  database="member"
 #     )
-api= Api(app) #創建api物件
+# api= Api(app) #創建api物件
+app = Flask(__name__, static_url_path="/static")
 app.secret_key = "mySecret"  # session的密鑰
 app.config["PERMANENT_SESSION_LIFETIME"] = 600 #Session過期時間
-
+app.register_blueprint(api) #Blurprint導入api
  #建立API
-class Search(Resource):
-    def get(self):
-        username=request.args.get("username")
-        connection=connection_pool.get_connection()
-        mycursor=connection.cursor()
-        mycursor.execute("SELECT id,name,username from member WHERE username=%s",(username,))
-        user=mycursor.fetchone()
-        connection.close()#關閉connection pool
-        if user:
-            return {"data": {
-                "id":user[0],
-                "name":user[1],
-                "username":user[2]
-                    }
-                }
-        else:
-            return{"data":None
-            }
-    def post(self):
-        if session.get("username"):
-            username=session.get("username")
-            name =session.get("name")
-            newname=request.get_json() #接收json
-            # print(newname["name"],username)
-            if newname["name"] =='' or newname["name"] == name:
-                res={"error":True} 
-                print(res)
-                return jsonify(res)
-            else:
-                connection=connection_pool.get_connection()
-                mycursor=connection.cursor()
-                update ="UPDATE member SET name=%s WHERE username=%s"
-                val = (newname["name"],username)
-                mycursor.execute(update,val)
-                connection.commit()
-                session["name"]=newname["name"]
-                connection.close()#關閉connection pool
-                return jsonify( {"ok":True})
-        else:
-            res={"error":True}
-            print(res)
-            return jsonify(res)
-            #==json.dumps差別在於Content-Type。jsonify==application/jso。 json.dumps==text/html; charset=utf-8
-api.add_resource(Search, "/api/members") #endpoint
+# class Search(Resource):
+#     def get(self):
+#         username=request.args.get("username")
+#         connection=connection_pool.get_connection()
+#         mycursor=connection.cursor()
+#         mycursor.execute("SELECT id,name,username from member WHERE username=%s",(username,))
+#         user=mycursor.fetchone()
+#         connection.close()#關閉connection pool
+#         if user:
+#             return {"data": {
+#                 "id":user[0],
+#                 "name":user[1],
+#                 "username":user[2]
+#                     }
+#                 }
+#         else:
+#             return{"data":None
+#             }
+# class Update(Resource):
+#     def post(self):
+#         if session.get("username"):
+#             username=session.get("username")
+#             name =session.get("name")
+#             newname=request.get_json() #接收json
+#             # print(newname["name"],username)
+#             if newname["name"] =='' or newname["name"] == name:
+#                 res={"error":True} 
+#                 print(res)
+#                 return jsonify(res)
+#             else:
+#                 connection=connection_pool.get_connection()
+#                 mycursor=connection.cursor()
+#                 update ="UPDATE member SET name=%s WHERE username=%s"
+#                 val = (newname["name"],username)
+#                 mycursor.execute(update,val)
+#                 connection.commit()
+#                 session["name"]=newname["name"]
+#                 connection.close()#關閉connection pool
+#                 return jsonify( {"ok":True})
+#         else:
+#             res={"error":True}
+#             print(res)
+#             return jsonify(res)
+#             #==json.dumps差別在於Content-Type。jsonify==application/jso。 json.dumps==text/html; charset=utf-8
+# api.add_resource(Search, "/api/members") #endpoint
+# api.add_resource(Update, "/api/member") #endpoint
 
 #首頁
 @app.route("/")
@@ -90,8 +96,9 @@ def signin():
     if request.method =="POST":
         username = request.form["username"]
         password = request.form["password"]
-        connection=connection_pool.get_connection()
+        connection=connect()
         mycursor=connection.cursor() 
+        getconnection=connect()
         mycursor.execute("SELECT name,username,password FROM member WHERE username=%s",(username,))
         user=mycursor.fetchone()
         connection.close()#關閉connection pool
@@ -122,7 +129,7 @@ def signup():
         username = request.form["username"]
         # password = request.form["password"]
         hashed_password = generate_password_hash(request.form["password"])
-        connection=connection_pool.get_connection()  #連結connection pool
+        connection=connect()
         mycursor=connection.cursor()
         mycursor.execute("SELECT username FROM member WHERE username=%s",(username,))
         finduser = mycursor.fetchone()

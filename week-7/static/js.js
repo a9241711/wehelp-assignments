@@ -28,7 +28,7 @@ inputchange.addEventListener("click",(e)=>{
     let change =document.querySelector(".change")
     let changemessage = document.querySelector(".changemessage")
     console.log(changename)
-    fetch("http://127.0.0.1:3000/api/members",{
+    fetch("http://127.0.0.1:3000/api/member",{
         method:"POST",
         headers:{"Content-Type":"application/json"},
         body:JSON.stringify({ name:changename}) //轉換JSON字串
