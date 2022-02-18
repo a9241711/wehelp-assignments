@@ -1,5 +1,4 @@
-from urllib import response
-from flask import Flask, flash, redirect, url_for, request, render_template, session,jsonify,Blueprint 
+from flask import Flask, flash, redirect, url_for, request, render_template, session,Blueprint 
 from werkzeug.security import generate_password_hash, check_password_hash
 from database import connect
 from view.api import api

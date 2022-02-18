@@ -2,7 +2,7 @@ from database import connect
 from flask import session,jsonify ,Blueprint,request
 api= Blueprint("app",__name__,url_prefix='/api')
 
-@api.route("/members")
+@api.route("/members",methods=["GET"])
 def Search():
     username=request.args.get("username")
     connection=connect()
