@@ -76,41 +76,50 @@ nav li:hover {
   padding: 0;
   margin: 0;
 }
-.content {
+/* .content {
   margin: 20px auto;
   max-width: 1200px;
-}
-.container {
+} */
+/* .container {
+  margin: 20px auto;
+  max-width: 1200px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
   margin: auto;
-}
+} */
 /* .container-content .pic {
   height: 200px;
 } */
-.text {
-  text-align: center;
-  width: 100%;
-  background-color: rgb(178, 204, 252);
-}
 
-@media (min-width: 1201px) {
-  .container .container-content {
-    width: 290px;
+/*改用Grid排版*/
+.container {
+  max-width: 1200px;
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+.container-content {
+    /* width: 290px; */
     margin: 10px 5px;
-    display: flex;
+    /* display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: center; */
   }
-  .container-content img {
+.container-content img {
     width: 100%;
   }
-}
+.text {
+    text-align: center;
+    width: 100%;
+    background-color: rgb(178, 204, 252);
+  }
 @media (min-width: 601px) and (max-width: 1200px) {
-  .container {
+  /* .container {
     max-width: 90%;
     display: flex;
     align-items: center;
@@ -125,8 +134,23 @@ nav li:hover {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+  } */
+  .container {
+    width: 90%;
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    grid-template-columns: repeat(2,1fr);
+    margin: auto;
   }
-
+  .container .container-content {
+    /* width: 45%; */
+    margin: 10px 5px;
+    /* display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; */
+  }
   .container-content img {
     width: 100%;
   }
@@ -176,7 +200,7 @@ nav li:hover {
     margin: 10px 0;
     padding: 5px;
   }
-  .container {
+  /* .container {
     max-width: 90%;
     display: flex;
     align-items: center;
@@ -190,8 +214,23 @@ nav li:hover {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+  } */
+/* grid排版 */
+.container {
+    width: 90%;
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    grid-template-columns: 1fr;
+    margin: auto;
   }
-
+.container .container-content {
+    margin: 10px 5px;
+    /* display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; */
+  }
   .container-content img {
     width: 100%;
   }
