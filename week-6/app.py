@@ -72,6 +72,8 @@ def signin():
             return redirect(url_for("error",message=message))
         #if user exist
         session['username'] = user[0]  # 使用者存入session
+        session['email']=user[1]
+        print(user[0],user[1])
         flash('You were successfully logged in')
         return redirect(url_for("member", username=username))
     return render_template("index.html")
@@ -109,8 +111,26 @@ def error():
 
 @app.route("/member")
 def member(): 
-    return render_template("member.html", username=session.get("username"))
+    return render_template("member.html", username=session.get("username"),email=session.get("email"))
 
+@app.route("/modify" , methods=["GET","POST"])
+def modify():
+    email=session["email"]
+    connection=connection_pool.get_connection()
+    mycursor=connection.cursor()
+    mycursor.execute("SELECT name from member WHERE username=%s",(email,))
+    modifyone=mycursor.fetchone()
+    print(modifyone)
+    if request.method=="POST":
+        name=request.form["name"]
+        update="UPDATE member SET name=%s WHERE name=%s"
+        val=(name,modifyone)
+        print(update,val)
+        mycursor.execute(update,val)
+        
+        connection.commit()#存入DB
+        connection.close()#關閉connection pool
+    return render_template("member.html")
 
 @app.route("/signout")
 def signout():

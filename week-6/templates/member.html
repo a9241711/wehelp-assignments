@@ -12,4 +12,12 @@
 
 <h1 style="text-align: center; margin: 10px 0;">恭喜您{{username}}，成功登入系統</h1>
 <a href="{{url_for('signout')}}">登出系統</a>
+<form action="{{url_for('modify')}}" method="POST">
+  <div>
+  <label >姓名</label>
+  <input type="text" name="name" >
+  </div>
+  
+  <button type="submit"> 修改個人資訊</button>
+</form>
 {% endblock%}
